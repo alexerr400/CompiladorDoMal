@@ -1,0 +1,40 @@
+O que tá acontecendo nesse projeto...
+
+O OBJETIVO É LER TUDO DO ARQUIVO PASSADO PELO USUÁRIO E VER SE O QUE ESTÁ SENDO LIDO É O ESPERADO DE UM PROGRAMA QUE FUNCIONA. O PROJETO NÃO É BEM UM COMPILADOR, É MAIS UMA COISA PRA DEBUGAR, SABE? AÍ SE TIVER UM ERRO DE ALGO INESPERADO ELE LANÇA EXCEPTION, QUE NO NOSSO CASO SERIA UMA MENSAGEM OU SEI LÁ.
+
+
+-A classe AnalisadorLexico só compara o que tá sendo lido pra saber se é palavra reservada ou não.
+	-Ainda precisa fazer o getConsumindo e o getSemConsumir(eu coloquei comentários no arquivo do "trabalho")
+	-Como o analisadorLexico está funcionando:
+		-->Ele vai percorrer o arquivo e ler palavra por palavra, ao invés do que tava antes, que a gente lia o arquivo inteiro lá com as linhas e depois voltava pra percorrer(pelo menos era isso que eu tava entendendo)
+		--> Voltando... Quando ele ler a palavra, vai retornar ela pro analisadorSintatico, que vai tratar aquele TipoDePedaço que recebeu. Então, supondo, se for procedure, vai chamar um método que trata procedure (ISSO NO ANALISADORSINTATICO).
+			--->Nesse método de tratar procedure vai ter que ver se a próxima "palavra" lida do arquivo é um nomeDeProcedimento (que lá no enum ta como um IDENTIFICADOR) se for identificador, beleza, continua as análises de acordo com o que é esperado de um procedimento. Se não for, pega e já retorna Exception, pq o programa tá errado.
+	
+	-No AnalisadorLexico, a gente tem um getNome e getValor e qual é a deles:
+		-->O getNome é importante, porque imagine dentro de um método, não pode ter duas variáveis com o mesmo nome, então a gente tem que lançar exceção se isso acontecer. Agora o getValor não é necessário, porque seria pra comparar numeros e tals, mas o nosso programa não precisa printar o valor ou algo do tipo, então não vamos implementar o getValor.
+
+
+
+
+
+
+
+-A classe que realmente vai fazer as coisas é o AnalisadorSintatico(que vai ficar beeeeeeeeeeem grande, com muitos if's e métodos de tratamento de TipoDePedaco recebido)
+
+
+
+
+
+
+
+-A TabelaDeSimbolos é uma outra classe auxiliar do analisadorSintatico. O que ela precisa fazer:
+	--> Supondo que tem uma variável declarada global, o nível dela é 0 e pode ser acessada de qualquer lugar. Agora imagine um procedure A (nivel 1) que dentro dele chama um procedure B(nivel 2). Tudo o que tiver dentro do procedure B só pode ser acessado se o nível for 0 ou 2, porque ele não pode acessar o que tá em 1.
+	--> A tabelaDeSimbolos pega o simbolo e atribui um nível para ele, que deve ser somado quando na leitura do nosso programa, encontrar um inicioDeComandoComposto. Aí supondo, quando for sair do método, ele vai chegar no fimDeComandoComposto, ai dec o nível... Pensa na lógica de recursão e tals.
+
+
+
+
+-Sobre aquelas classes extras que o Maligno colocou no arquivo "trabalho" (Variavel, Procedimento e etc), elas podem ser importantes e devem ser implementadas ainda.
+
+
+

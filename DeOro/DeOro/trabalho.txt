@@ -1,0 +1,159 @@
+Program Prog;
+    var a,b:integer;
+
+    Procedure proc1;
+        var v1, v1: integer;
+        Procedure proc2;
+            Var x,y:boolean;
+        begin
+        ...
+        end;
+    begin
+    ...
+    end;
+begin
+...
+end.
+
+begin
+    a:=5;
+    b:=a+2;
+    write(b);
+end.
+
+Analisador Lexico e Sintatico para um Pascal simplificado.
+Simplificacoes:
+1) Tipos so integer e boolean
+2) Loop so while
+3) Seletor so if
+
+class AnalisadorLexico
+{
+    public:
+        typedef enum {
+            INICIO_DE_PROGRAMA,
+            INICIO_DE_DECLARACAO_DE_VARIAVEL_OU_PARAMETRO_POR_REFERENCIA,
+            INICIO_DE_DECLARACAO_DE_PROCEDIMENTO,
+            INICIO_DE_DECLARACAO_DE_FUNCAO,
+            INICIO_DE_COMANDO_COMPOSTO,
+            FIM_DE_COMANDO_COMPOSTO,
+            SE,
+            ENTAO,
+            SENAO,
+            ENQUANTO,
+            FACA,
+            VIRGULA,
+            PONTO_E_VIRGULA,
+            DOIS_PONTOS,
+            PONTO,
+            ABRE_PARENTESES,
+            FECHA_PARENTESES,
+            LEIA,
+            ESCREVA,
+            ...
+            TRUE,
+            FALSE,
+            NUMERO,
+            IDENTIFICADOR,
+            NULO,
+            Pedaco_DESCONHECIDO }
+            TipoDePedaco;
+
+        AnalisadorLexico (char* nomeArq);
+       ~AnalisadorLexico (); // fecha arquivo
+
+        // 1o grupo de gets
+        TipoDePedaco getPedacoSemConsumir ();
+        TipoDePedaco getPedacoConsumindo ();
+        
+        // 2o grupo de gets
+        char* getNome  (); // deve ser usado quando o ultimo retorno de um dos gets do 1o grupo tiver sido identificador; dar excecao caso contrario
+        int   getValor (); // deve ser usado quando o ultimo retorno de um dos gets do 1o grupo tiver sido numero; dar excecao caso contrario
+
+    private:
+        char* conhecido [] = {"program","var","procedure",...
+        FILE* arquivo;
+        TipoDePedaco buffer, ultimoPedacoRetornado;
+        char nomeDoIdenficador [256];
+        int  valorDoNumero;
+};
+
+-----------------------------------------------------
+
+class Simbolo
+{
+    public:
+        typedef enum {
+            VARIAVEL
+            PROCEDIMENTO,
+            FUNCAO,
+            PARAMETRO }
+            TipoDeSimbolo;
+
+        typedef enum {
+            INTEIRO,
+            BOOLEANO }
+            TipoDeTipo;
+
+        // construtor, getters
+
+    private:
+        TipoDeSimbolo tipo;
+        char          nome [255];
+        unsigned int  escopo;
+};
+
+class Variavel: public Simbolo
+{
+    public:
+        // construtor, getters
+
+    private:
+        TipoDeTipo tipo;
+};
+
+class Parametro: public Simbolo
+{
+    public:
+        typedef enum {
+            POR_VALOR,
+            POR_REFERENCIA }
+            TipoDePassagem;
+
+        // construtor, getters
+
+    private:
+        TipoDeTipo     tipo;
+        TipoDePassagem passagem;
+};
+
+class Procedimento: public Simbolo
+{
+    public:
+        // construtor, getters (fazer TipoDeTipo getParametro (unsigned int i))
+
+    private:
+        TipoDeTipo* tipoDoParametro; // vetor de TipoDeTipo
+};
+
+class Funcao: public Simbolo
+{
+    public:
+        // construtor, getters (fazer TipoDeTipo getParametro (unsigned int i))
+
+    private:
+        TipoDeTipo* tipoDoParametro; // vetor de TipoDeTipo
+        TipoDeTipo  tipoDoRetorno;
+};
+
+class TabelaDeSimbolos
+{
+    private:
+        Simbolo**    declaracao;  // vetor de Simbolo*
+        unsigned int escopoAtual; // comeca com 0, aumenta quando comeco a compilacao de um procedimento ou funcao e diminui quando termino a compilacao de um procedimento ou funcao
+
+    public:
+        void     guarde (Simbolo* s); // se s for procedimento ou funcao, armazena-o e aumenta o escopoAtual
+        Simbolo* getSimbolo (char* nome);
+        void     morteAoEscopoAtual (); // remover tudo que tem escopo igual ao escopo atual e diminui o escopo
+};

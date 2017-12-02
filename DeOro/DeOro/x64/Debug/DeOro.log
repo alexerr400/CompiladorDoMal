@@ -1,0 +1,5 @@
+﻿  DeOro.cpp
+  AnalisadorLexico.cpp
+  Generating Code...
+DeOro.obj : error LNK2019: unresolved external symbol "public: __cdecl AnalisadorLexico::~AnalisadorLexico(void)" (??1AnalisadorLexico@@QEAA@XZ) referenced in function main
+Z:\TIAGO OLHA AQUI\DeOro\x64\Debug\DeOro.exe : fatal error LNK1120: 1 unresolved externals
